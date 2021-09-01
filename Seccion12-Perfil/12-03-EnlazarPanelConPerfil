@@ -1,0 +1,16 @@
+Ahora... Si queremos acceder a la edición de perfil, solo podemos hacerlo 
+escribiendo la URL. Por eso agregaremos un botón en el index para hacerlo desde ahí
+Ese botón estará al lado del botón de crear una receta.
+Su href será: {{route('perfiles.edit', ['perfil' =>Auth::user()->id])}}
+Qué significa esto? Bueno, significa que se ejecutará el método EDIT de
+perfilescontroller, y luego le indicaremos qué perfil nos modificará. 
+El perfil modificado será el perfil perteneciente al usuario autenticado.
+Luego en app.blade.php podemos agregar los mismos enlaces en el dropdown 
+para poder ir al perfil o a la edición del mismo desde cualquier pantalla
+
+-------------------------------------------
+
+
+
+
+

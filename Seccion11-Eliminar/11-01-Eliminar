@@ -1,0 +1,44 @@
+Para eliminar un registro debemos realizar lo siguiente: 
+
+1- Debemos crear la nueva ruta con el método delete.
+Route::delete('/recetas/{receta}', 'RecetaController@destroy')->name('recetas.destroy');
+
+2- Vamos a modificar el policy, donde agregaremos la misma validación que para 
+el método update. 
+//Revisa si el usuario autenticado es el mismo que creó la receta
+        return $user->id===$receta->user_id;
+        //Ese "user_id" viene de la migración create_recetas_table
+
+        /*Si el id del usuario que está modificando, es igual al id del usuario
+        que creó la receta, puede modificar.
+
+
+3- En el index, modificaremos ligeramente nuestro link de eliminar. 
+Agregaremos form, y pondremos dentro de él nuestro link de eliminar. 
+Este link ahora será un input de tipo submit, y su value será "Eliminar &times;"
+((&times; agrega una X))
+En este form agregaremos @method('DELETE') y tambien el @csrf
+
+4- El action de este form, será:
+{{action('RecetaController@destroy', [$receta->id])}}
+Le decimos que cuando "submitiemos" el formulario, ejecutará el método destroy
+en la receta cuyo ID sea el que le demos click. 
+
+5- Ahora, por último, debemos especificar qué es lo que hace el método destroy,
+porque si le damos click a submit, llamamos al metodo destroy, pero este método 
+está vacío, no pasará nada.
+El método destroy hace lo siguiente: 
+
+    A- Ejecutar el policy
+        $this->authorize('delete', $receta);
+
+    B-Eliminar la receta
+        $receta->delete();
+
+    C- Redirecciona al index
+        return redirect()->action('RecetaController@index');
+
+Agregaremos una confirmación de que realmente queremos borrar esta receta
+Lo haremos con un modal, por lo que el form, estará incluido dentro de lo que 
+sería un boton DENTRO del modal.
+

@@ -1,0 +1,42 @@
+Para validar un formulario, esto se hace via Laravel, aunque tambien se puede 
+hacer en HTML (no recomendable);
+
+Primero, debemos agregar el atributo "novalidate" en los inputs que no queremos 
+validar via HTML. 
+
+Luego, en el $data=$request (del controller), se agrega un método de validación (están explicados
+en la documentación de Laravel). Por lo que quedaría expresado así:
+
+$data=$request->validate([
+    'campoAValidar'=>'required|min:6'
+]);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Luego, Laravel tiene un sistema de seguridad de formularios ya implementado.
+En cada formulario que tengamos, debemos agregar, luego de la apertura de 
+form (<form>) el comando @csrf. 
+
+--------------------------------------------------------------------------
+
+Para que el usuario sepa qué error cometió al llenar el formulario, debemos
+agregar con Laravel algunas líneas de error.
+
+1- Debajo del input, abrimos y cerramos directivas de @error('nombreDelCampo')
+y dentro creamos un span con la clase invalid-feedback d-block y con un role='alert'
+Dentro del span, ponemos {{message}}, que es un mensaje automático que enviará
+Laravel.
+Debería quedar así:
+@error('name')
+<span class='invalid-feedback d-block' role='alert'>
+    <strong>{{message}}</strong>
+</span>
+@enderror
+
+2-Luego, en la class del input, se agregan nuevas directivas de error, y dentro 
+escribimos ('nombreDelCampo') is-invalid:
+@error ('nombreDelCampo') is-invalid @enderror
+
+3-Por último, para que cuando no se cumplen los requisitos del formulario 
+NO SE BORRE lo que ya hemos escrito, agregamos un value al input de 
+{{old('nombreDelCampo')}};

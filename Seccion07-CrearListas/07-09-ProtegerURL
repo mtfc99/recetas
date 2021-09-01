@@ -1,0 +1,7 @@
+Para que no se pueda acceder a una página sin estar autenticado, debemos
+ir al controlador y agregar un constructor con la siguiente línea
+
+$this->middleware('auth');
+
+Con eso, si queremos entrar a la URL de recetas sin estar autenticado, nos 
+va a devolver al login

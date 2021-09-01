@@ -1,0 +1,15 @@
+Para guardar datos en una BBDD, se debe, primero que nada,
+agregar el campo que queremos guardar en la migración, con la siguiente sintaxis
+$table->string('nombre');
+
+Luego debemos ir al controlador, y en el método store, realizamos 3 simples pasos:
+1- Le decimos al método que todo lo que venga vía request, lo guardamos en una 
+variable llamada $data. $data=$request;5
+
+2- Via Facade, le decimos al controlador que queremos insertar, y en que tabla.
+DB::table('nombreDeLaTabla)->insert([
+    'nombreDelCampoALlenar'=>$data['nombreDelCampoALlenar'];
+]);
+
+3-Al introducir un dato, que nos lleve a una pantalla distinta 
+return redirect()->action('Controlador@metodo');

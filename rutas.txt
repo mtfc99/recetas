@@ -1,0 +1,45 @@
+app/http/controllers (Controladores)
+app/entidades (Entidades-Modelo)
+routes/web.php (Hoja de ruteo)
+resources/views/ (Vistas)
+public (css, js, images, files)
+
+Modelos: EN SINGULAR  
+Clase: SINGULAR  
+TABLAS: PLURAL!! 
+
+CREAR PROYECTO LARAVEL:
+composer create-project laravel/laravel=^7 nombre
+
+LEVANTAR SERVIDOR LARAVEL:
+php artisan serv
+
+AGREGAR AUTENTIACION AL PROYECTO
+composer require laravel/ui:^2.4
+php artisan ui --auth
+
+TRADUCIR LARAVEL AL ESPAÑOL:
+-composer requiere laraveles/spanish
+-php artisan laraveles:install-lang
+-ir a config/app.php/cambiar locale='en' a 'es'
+
+AYUDA PARA TODO:
+php artisan list 
+
+SI QUEREMOS AYUDA PARA ALGO EN PARTICULAR
+php artisan help make:X (x ej: make:migration)
+
+INCLUIR BIBLIOTECAS EN LARAVEL: BOOTSTRAP, y REACT o VUE
+1-php artisan ui bootstrap
+2-php artisan ui react/vue 
+3-npm install (para instalar)
+4-npm run watch (para que los cambios se actualicen constantemente)
+
+CREAR MODELO, MIGRACION Y CONTROLADOR:
+php artisan make:model Nombre_en_singular -mcr
+Este comando crea los controladores con las rutas predefinidas 
+de Laravel según las buenas prácticas de programación
+
+COMANDO PARA QUE LAS IMAGENES DE STORAGE SEAN PUBLICAS Y VISIBLES
+php artisan storage:link
+

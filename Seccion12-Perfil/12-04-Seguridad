@@ -1,0 +1,22 @@
+Agregaremos un policy para editar nuestro perfil SOLO NOSOTROS
+
+php artisan make:policy PerfilPolicy -m Perfil
+
+Luego, en el método UPDATE del Policy, agregaremos la validación, similar a 
+la que usamos en el policy de recetas.
+        return $user->id===$perfil->user_id;
+
+//Si el ID del usuario logeado, es igual al id del usuario
+//dueño del perfil, es el mismo usuario.
+Y por último, en el metodo UPDATE pero esta vez del CONTROLLER, 
+ejecutaremos el policy. 
+
+        $this->authorize('update', $perfil);
+
+
+
+Luego, debemos hacer que no se pueda ni siquiera acceder a la pantalla 
+de edición si no estamos logeados.
+Lo que debemos hacer es realizar lo mismo que antes, solo que ahora 
+en el método EDIT, tanto del policy como del controlador.
+También se puede hacer en el método VIEW del policy.

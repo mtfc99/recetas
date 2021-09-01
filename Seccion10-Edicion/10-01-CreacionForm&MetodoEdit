@@ -1,0 +1,63 @@
+Debemos crear una ruta que nos lleve al método edit, y que luego este método 
+nos traiga la vista de edit.blade.php. 
+Esta vista será casi igual a la vista de recetas, solo que cambiaremos 
+el título, y agregaremos un div pequeño donde se podrá ver 
+la imagen actual (en caso de que queramos cambiarla por una nueva)
+
+Luego debemos rellenar los campos con la información ya guardada de dicha receta 
+Esto lo hacemos con $receta->titulo (por ejemplo)
+En el caso del select, es distinto.
+Tenemos que decir que, si la categoria_id de la receta, es igual al id de la categoria, 
+que nos escriba la categoría:
+$receta->categoria_id===$categoria->id
+
+Con eso habremos terminado la vista de Edit. 
+
+----------------------------------------------------------------------------
+
+
+Siguiente, debemos crear la ruta via put, y luego agregar el @method('PUT') al form.
+Una vez hicimos eso, especificamos el action del formulario, especificando 
+que va a ejecutarse el metodo update, y QUÉ vamos a updatear:
+{{route('recetas.update', ['receta'=>$receta->id])}}
+
+Una vez hicimos eso ,debemos crear el método update.
+Hacemos la validación (sin la imagen, por si ya no la tenemos o por si 
+ya no la queremos cambiar)
+Luego de la validación, asignamos valores.
+//Asignamos valores
+        $receta->titulo= $data['titulo'];
+        $receta->ingredientes= $data['ingredientes'];
+        $receta->preparacion= $data['preparacion'];
+        $receta->categoria_id= $data['categoria'];
+
+Y decimos que, EN EL CASO de que llegue una imagen nueva, ejecutemos y guardemos
+esta dicha imagen nueva.
+
+if(request('imagen')){
+$rutaImagen=$request['imagen']->store('upload-recetas', 'public');
+        //Resize imagen
+        $img=Image::make( public_path("storage/{$rutaImagen}"))->fit(1000,550);
+        $img->save();
+
+
+        //Y por último, asignamos la foto al objeto
+        $receta->imagen=$rutaImagen;
+}
+
+----------------------------------------------------------------------------
+
+Por último, nos aseguramos de que SOLO LA PERSONA que CREÓ la receta 
+pueda editarla. Esto se logra con los POLICIES
+Un policy es una forma de autorizar a un usuario para realizar ciertas acciones 
+Por ejemplo, si un usuario tiene la autorizacion para modificar un registro.
+Los policies se crean con php artisan make:policy NOMBRE -m NOMBREDELMODELO
+Usualmente es un nombre igual al del modelo, seguido de la palabra policy 
+y luego le indiicamos con -m el nombre del modelo al que queremos atar 
+este policy. Para el caso de recetas:
+
+php artisan make:policy RecetaPolicy -m Receta
+
+        return $user->id===$receta->user_id;
+Ese codigo lo tenemos que poner en los métodos que queremos que sean hechos 
+solo por un usuario autenticado. Es decir, en update y en delete.

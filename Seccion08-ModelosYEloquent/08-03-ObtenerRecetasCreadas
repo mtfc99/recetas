@@ -1,0 +1,21 @@
+Para obtener las recetas que creamos, debemos trabajar en el método index 
+de RecetasController.
+
+dentro de este método debemos especificar que queremos ver las recetas 
+creadas por el usuario autenticado, por lo que debemos usar el Facade Auth:
+
+Auth::usar()->recetas->dd(); (usamos dd en este caso solo para ver si la conexión
+fue exitosa)
+
+auth()->usar()->recetas->dd(); también es válido
+
+
+Luego, guardamos esa línea en una variable ($recetas, por ejemplo), la pasamos al 
+compact de return view, y con eso ya podemos trabajar en la vista, utiliznado un 
+foreach por ejemplo para mostrar cada campo...
+--------------------------------
+Si nos fijamos en la tabla de recetas, la categoría aparece con su ID en lugar 
+de con su título.
+
+Para hacer esto, debemos trabajar en el modelo de Receta.
+Debemos obtener la categoría de la receta via FK

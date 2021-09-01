@@ -1,0 +1,23 @@
+Las seeds son datos que se integrarán a la BBDD luego de cada actualización
+de migraciones. Son una especie de datos permanentes
+(RECORDAR QUE CON CADA MIGRATE:FRESH SE BORRAN LOS DATOS DE LA BBDD)
+
+Las seeds se crean con el comando:
+php artisan make:seeder NombreSeeder
+
+Una vez creado el seeder, vamos al archivo 
+(ubicado en databese/seeds) y por ejemplo, si creamos un CategoriasSeeder
+en el método run, creamos los campos que deseamos sean permanentes en 
+la BBDD luego de hacer un migrate:fresh
+
+DB::table('categoria_receta')->insert([
+            'nombre'=>'Comida Mexicana',
+            'created_at'=>date('Y-m-d H:i:s'),
+            'updated_at'=>date('Y-m-d H:i:s'),
+]);
+
+
+Para refrescar las migraciones y ADEMÁS incluir los seeders en la BBDD, debemos 
+realizar el siguiente comando:
+
+php artisan migrate:refresh --seed

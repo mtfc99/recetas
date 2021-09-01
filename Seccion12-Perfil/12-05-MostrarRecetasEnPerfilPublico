@@ -1,0 +1,16 @@
+Para mostrar las recetas en el perfil público debemos de trabajar en el 
+PerfilController.
+
+En el método show, debemos decir que la variable $receta, nos traerá todas las 
+recetas cuyo creador sea el dueño del perfil que estamos viendo. 
+Y luego, también paginamos.
+Para hacer eso, escribimos lo siguiente.
+
+$recetas=Receta::where('user_id', $perfil->user_id)->paginate(5);
+Luego agregamos 'recetas' al compact.
+
+Estamos diciendo que $receta es igual a los objetos de modelo Receta, donde el
+id del usuario creador, sea igual al id del usuario dueño del perfil. Y que nos
+muestre de a 5 recetas.
+Agregando 'recetas' al compact, estamos diciendo que ese array está disponible
+para usarse en el blade, como hemos visto ya varias veces.

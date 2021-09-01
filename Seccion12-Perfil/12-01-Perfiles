@@ -1,0 +1,47 @@
+1- Debemos crear un controlador, una migración y un modelo de Perfil.
+php artisan make:model Perfil -mcr 
+
+2- Luego, en la migración, especificamos que campos nuevos queremos poner 
+en el perfil de cada usuario. Como hicimos en la receta.
+ Schema::create('perfils', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->text('biografia')->nullable();
+            $table->string('imagen')->nullable();
+            $table->timestamps();
+        });
+
+3- Ejecutamos el migrate:fresh y en la BBDD debería aparecer las nuevas columnas
+
+----------------------
+
+4- Ahora tenemos que relacionar cada usuario con cada perfil.
+En el modelo User, debemos volver a relacionar al usuario con un perfil, como 
+lo hicimos con la receta, y como hicimos entre las recetas y la categoría.
+public function perfil(){
+        return $this->hasOne(Perfil::class);
+    }
+
+Y en el modelo Perfil, hacemos lo mismo pero a la inversa.
+ public function usuario(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+Y separado por una coma, indicamos que ese perfil, pertenece a ESE user_id.
+
+5- Una vez que hicimos que cada usuario tenga un perfil, y que cada perfil 
+pertenece a un usuario, debemos indicar que cada vez que se crea un usuario, 
+también se cree un perfil, de manera simultánea. Esto se logra con 
+un evento de Eloquent llamado CREATED.
+Esto lo hacemos en el modelo de User, creando un nuevo método static y protected
+llamado booted, cuyo cuerpo será:
+
+parent::boot(),
+
+//Asignar perfil una vez se haya creado un usuario nuevo
+static::created(function($user){
+    $user->perfil()->create();
+});
+
+}
+
+------

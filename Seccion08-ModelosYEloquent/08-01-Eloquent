@@ -1,0 +1,17 @@
+Eloquent es un ORM, que permite conectar los objetos de una aplicación 
+con las tablas en una BBDD. Con un ORM se puede realizar las consultas 
+de la BBDD en vez de lenguaje SQL.
+
+Cada framework tiene su ORM. 
+
+El ORM funciona sobre el MODELO y siempre está conectado a la BBDD.
+
+Eloquent tiene funciones predeterminadas para definir funciones entre tablas:
+
+1- 1:1 - hasOne (un usuario tiene un perfil, una receta tiene una categoria)
+2- 1:n - hasMany (un usuario puede tener muchas recetas)
+3- n:n - belongsToMany (a muchos usuarios les puede gustar muchas recetas)
+--
+4- 1:1 - belongsTo 
+5: 1:n - belongsTo 
+6: n:n - belongsToMany 

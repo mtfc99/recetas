@@ -1,0 +1,10 @@
+Vamos a crear la relación de que un usuario puede tener muchas recetas.
+Esto se hace creando un método en el modelo usuarios, y diciéndole que 
+un usuario hasMany recetas.
+
+public function recetas(){
+    $this->hasMany(Recetas::class);
+}
+
+$this se refiere al modelo Usuario, y tiene muchas recetas.
+Con el ::class, le decimos que se refiere al modelo de Recetas.

@@ -1,0 +1,7 @@
+1- Una clase abstracta es una clase que no puede ser instanciada
+2- Una interfaz es una plantilla para una clase (solo acepta métodos, no items)
+3-Namespaces ES LA PRIMERA LINEA DEL PROGRAMA
+Cada namespace permite que dos clases puedan compartir nombre, pero en
+namespaces distintos. IGUAL NOMBRE, EN DISTINTAS CLASES SIN CHOCAR
+
+

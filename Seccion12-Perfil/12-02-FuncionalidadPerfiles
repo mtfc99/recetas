@@ -1,0 +1,82 @@
+1- Tenemos que realizar el ruteo para los perfiles también, de modo que cuando 
+vayamos a determinada URL, nos lleve al perfil que digamos.
+Esto lo hacemos en web.php:
+Route::get('/perfiles/{perfil}', 'PerfilController@show')->name('perfiles.show');
+
+
+2- Ahora, no necesitamos ningún método de create para el perfil, ya que 
+vimos como crear un perfil automáticamente al crear una cuenta. 
+Lo que haremos es trabajar con el método SHOW de PerfilController
+
+3- Dentro de la carpeta views, creamos un nuevo archivo blade llamado show. 
+En este show, maquetaremos nuestra vista a medida. Donde irá el nombre del usuario,
+donde irá su biografía, su foto de perfil, y su URL, en caso de tener.
+
+4- Ahora, el método show, nos redireccionará a esta nueva vista que creamos.
+con return view('perfiles.show', compact ('perfil'));
+Para probar que todo funcione, podemos decirle al código que nos muestre 
+el nombre del usuario linkeado con ESE perfil.
+
+{{$perfil->usuario->nombre}};
+
+5- Una vez creada la vista show, la ruta y el método en PerfilController, 
+pasamos a hacer lo mismo con el método edit.
+Primero creamos la ruta, luego una vista de edit en la carpeta perfiles.
+
+6- La vista de edicion de perfil será similar a la de edición de recetas. 
+Cambiaremos los nombres de los labels, los inputs y los errores.
+También, POR AHORA, comentaremos el value para que no tire ningún error.
+
+7- Ahora crearemos la ruta y el método para UPDATE. Realizaremos lo mismo que 
+para recetas en esta parte (la ruta y el @method en el form, entre las otras cosas
+que hicimos para updatear las recetas, como el action del formulario)
+
+7-b /*EN ESTE MOMENTO, VAMOS A MODIFICAR EL VALUE DE LOS INPUTS.
+Lo que haremos será decirle al programa que nos muestre 
+el valor del X campo del usuario al que pertenece ESE perfil.
+Es decir. $perfil->usuario->nombre, por ejemplo */
+
+8- En el método update de PerfilController, haremos algunas tareas:
+
+    //La validación de los datos.
+    $data = $request->validate([
+            'nombre'=>'required',
+            'biografia'=>'required',
+            'url'=>'required'
+        ]);
+
+Debemos fijarnos que en este momento hay que actualizar DOS tablas al mismo tiempo
+la de usuario (que contiene nombre y URL y la de perfiles)
+*/
+
+        if (request('imagen')) {
+
+            $rutaImagen = $request['imagen']->store('upload-perfiles', 'public');
+            //Resize imagen
+            $img = Image::make(public_path("storage/{$rutaImagen}"))->fit(600, 600);
+            $img->save();
+
+            //Asignamos la foto al objeto
+
+            $array_imagen=['imagen'=>$rutaImagen];
+        
+        }
+        //Asignar nombre y URL
+        auth()->user()->url = $data['url'];
+        //name=nombre de columna en tabla, nombre=nombre del input
+        auth()->user()->name = $data['nombre'];
+        auth()->user()->save();
+
+        //Eliminar URL y nombre porque estos campos no están en perfil, y ya
+        //están asignados en el metodo update. 
+        unset($data['url']);
+        unset($data['nombre']);
+
+        //Asignar biografia e imagen
+
+        auth()->user()->perfil()->update(
+            array_merge($data, $array_imagen ?? [])
+        );
+
+        //REDIRECCIONAR AL INDEX
+        return redirect()->action('RecetaController@index');

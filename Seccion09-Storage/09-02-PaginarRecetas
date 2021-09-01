@@ -1,0 +1,21 @@
+PAGINACIÓN DE RECETAS EN EL MÉTODO INDEX.
+
+En el método index del RecetaController, debemos especificar la paginacion
+
+Primero que nada, debemos guardar en una variable el ID del usuario.
+$usuario = auth()->user()->id;
+
+y luego debemos decir que en aquellas recetas donde el user_id
+sea el mismo al del usuario autenticado.
+
+$recetas = Receta::where('user_id', $usuario)->paginate(5);
+Ese número 5, es la cantidad de elementos que veremos por página.
+
+En esto decimos que la variable recetas que venimos usando, ahora
+solamente me va a traer 5 recetas.
+
+Para terminar, debemos ir al index.blade.php, y casi abajo de todo 
+con código blade, decimos que queremos llamar a los links de $receta.
+{{$receta->links()}}
+
+Con eso estaría completa la paginación.

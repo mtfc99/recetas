@@ -1,0 +1,49 @@
+Para almacenar una imagen via formulario, debemos hacer lo siguiente:
+//Obtener la ruta de la imagen para finalmente almacenarla en BBDD
+        /*Lo que decimos es que cuando el campo 'imagen' del formulario
+        envíe una señal via request, la vamos a almacenar en una carpeta
+        llamada upload-recetas, y será pública.  */
+
+        $rutaImagen=$request['imagen']->store('upload-recetas', 'public');
+
+
+        //Resize imagen
+        $img=Image::make( public_path("storage/{$rutaImagen}"))->fit(1000,550);
+        $img->save();
+
+
+            //Query para introducir datos en la BBDD SIN MODELO
+     /*   DB::table('recetas')->insert(
+            [
+                'titulo'=>$data['titulo'],
+                'ingredientes'=>$data['ingredientes'],
+                'preparacion'=>$data['preparacion'],
+                'imagen'=>$rutaImagen,
+                'user_id'=>Auth::user()->id,
+                'categoria_id'=>$data['categoria']
+
+            ]);*/
+
+
+/*Introducir en la base de datos CON MODELO. Auth toma al usuario autenticado
+y recetas es el método a usar del MODELO asignado. En este caso
+como estamos agregando recetas a la BBDD, usaremos el método recetas del modelo User.
+
+¿Pero por qué de User y no de Receta? Bueno, porque 
+el método recetas del modelo User, dice que un User hasMany(Recetas::class)
+Y nosotros en el index, queremos ver las recetas de cada User.
+*/
+        auth()->user()->recetas()->create([
+            'titulo'=>$data['titulo'],
+            'ingredientes'=>$data['ingredientes'],
+            'preparacion'=>$data['preparacion'],
+            'imagen'=>$rutaImagen,
+            'categoria_id'=>$data['categoria']
+        ]);
+
+
+            //Redireccionar luego de agregar
+            return redirect()->action('RecetaController@index');
+//dd($request->all());
+//dd Request , es lo que se envía hasta el store.
+//All indica que se almacenará todo
