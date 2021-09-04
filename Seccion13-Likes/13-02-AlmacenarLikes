@@ -1,0 +1,23 @@
+Una vez creado el botón, crearemos una tabla PIVOTE que relacione muchos likes 
+a muchas recetas. Esto lo haremos con una migración.
+RECORDAR: LAS MIGRACIONES CREAN TABLAS EN LA BBDD AL SER EJECUTADAS.
+
+1- Escribiremos:
+php artisan make:migration create_likes_recetas_pivot_table --create likes_receta 
+
+El "--create likes_receta" añade automáticamente una tabla con ese nombre.
+
+2- Ahora, dentro de las migraciones (en el schema::create) agregaremos algunos campos más
+ESpecificamente, 2: Usuario que da like, y A LA RECETA a la cual se le da like.
+
+Anteriormente habíamos escrito el siguiente código para linkear foreign keys.
+$table->foreignId('user_id')->references('id')->on('users');
+
+Pero Laravel simplifica esto, y podemos escribir solamente:
+$table->foreignId('user_id')->constrained();
+
+3- Para exportar estas migraciones pero SIN BORRAR LAS ANTERIORES, hay un comando
+php artisan migrate --path=/database/migrations
+
+Es decir, esto solo migra lo que no esté migrado anteriormente, y sin borrar 
+las migraciones ya creadas.

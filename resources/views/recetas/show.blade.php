@@ -40,6 +40,9 @@
             {!! $receta->preparacion !!}
         </p>
     </div>
+
+    <like-button></like-button>
+    
 </article>
 
 @endsection

@@ -1,0 +1,19 @@
+Para crear el boton del like y darle animación usaremos Vue Js.
+
+https://codepen.io/AlHakem/pen/yZGWxJ
+
+1- En el fondo del show.blade.php crearemos unas etiquetas llamadas
+like-button: <like-button></like-button>
+
+2- En los componentes de vue, crearemos uno nuevo llamado LikeButton.vue 
+en este componente abriremos una etiqueta template, y ahí pegamos el código html del 
+botón.
+Luego, creamos un nuevo archivo scss llamado _like.scss y lo importamos en 
+app.scss. En el archivo like.scss, pegaremos todo el código css que 
+está en el link de codepen.
+
+3- Para cerrar, creamos un nuevo componente vue.js en app.js. Este se llamará
+like-button, y requerirá al LikeButton.vue.
+Y en ese mismo archivo, pero más abajo, pegamos el código jQuery que está también
+en ese link de codepen. Vue ya incluye a jQuery, por lo que con solo pegar
+el código en app.js el botón tendría que estar funcionando.
