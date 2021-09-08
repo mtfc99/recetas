@@ -28,3 +28,8 @@ $nuevas = Receta::orderBy('created_at', 'DESC')->take(4)->get();
 O sino, $nuevas = Receta::latest()->limit(5)->get();
 Aclaraciones: Las palabras limit y take son intercambiables, ambas nos darán un límite de elementos a traer. Si queremos traer 4, 5 o las que sean.
 Esto va dentro del método index del InicioController.
+
+8- Se trabaja en el front end como se quiera.
+
+9- Añadiremos un carrusel para mostrar las últimas recetas.
+En consola, escribimos: npm i owl.carousel
