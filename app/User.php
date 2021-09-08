@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->hasOne(Perfil::class);
     }
 
+    //Recetas a las que el usuario le ha dado MG
+    public function meGusta(){
+        return $this->belongsToMany(Receta::class);
+    }
+
     protected static function booted(){
         parent::boot();
 

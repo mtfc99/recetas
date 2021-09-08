@@ -1,0 +1,30 @@
+1- Crearemos un controlador nuevo llamado InicioController.
+
+2- En la hoja de rutas, cambiaremos qué vista nos trae la ruta principal. Esto
+lo controlamos con la primera línea, cuya url viene vacía.
+En esta ruta, cambiamos el welcome y su función por el método index del 
+InicioController.
+Listo, ahora cuando entremos a la página base, nos llevará a esa vista.
+
+3- En la clase 121 podemos descargar los estilos de SASS que aplicaremos en 
+_recetas.scss. 
+
+4- Una vez actualizados los estilos y creado el controlador, diremos que 
+el método index del InicioController, nos llevará a la vista index de inicio.
+Entonces, en view, creamos una carpeta llamada inicio, y dentro un index.blade.php. Luego, en el index del controller, ponemos que nos lleve a ese archivo.
+
+5- En el archivo blade, pondremos el layout como siempre y modificaremos el 
+archivo a nuestro placer. Yo sigo el diseño del enseñante.
+
+6- Una vez creada la base de la página de inicio, debemos traer las últimas recetas para que el usuario no vea siempre lo mismo.
+
+--------------------------------------------------------------------------------
+
+7- Para traer las recetas, debemos crear una variable que almacene las recetas
+según su orden, ya sea de creación, de ID ,o de lo que queramos.
+En este caso, utilizaremos el orden de creación por orden descendente.
+Para hacer esto, podemos decir que 
+$nuevas = Receta::orderBy('created_at', 'DESC')->take(4)->get();
+O sino, $nuevas = Receta::latest()->limit(5)->get();
+Aclaraciones: Las palabras limit y take son intercambiables, ambas nos darán un límite de elementos a traer. Si queremos traer 4, 5 o las que sean.
+Esto va dentro del método index del InicioController.

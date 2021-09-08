@@ -21,3 +21,66 @@ php artisan migrate --path=/database/migrations
 
 Es decir, esto solo migra lo que no esté migrado anteriormente, y sin borrar 
 las migraciones ya creadas.
+
+4- Ahora, crearemos una relación entre los likes y las recetas.
+Una publicación puede tener muchos likes, y un usuario también.
+Entonces, en el modelo de Receta, crearemos la relación de belongstomany y haremos lo mismo en el modelo de User. 
+USER:
+//Recetas a las que el usuario le ha dado MG
+    public function meGusta(){
+        return $this->belongsToMany(Receta::class, 'likes_receta');
+    }
+
+RECETA:
+//Likes que ha recibido una receta
+    public function likes(){
+        return $this->belongsToMany(User::class, 'likes_receta');
+    }
+
+5- Agregamos el 'likes_receta' porque debemos especificar que nuestra tabla pivote será esa, ya que sino Laravel no entiende en donde se guardarán los likes. 
+
+6- Ahora crearemos un controlador que UNICAMENTE ALMACENARÁ quien da un like 
+o quien quita un like.
+Crearemos un controlador con el comando: 
+php artisan make:controller LikesController -m Receta
+El -m Receta, es par indicar que este controlador tendrá asociado al modelo Receta.
+
+7- Solo trabajaremos en el método UPDATE del nuevo controlador
+
+8- en la hoja de rutas, crearemos una nueva sección de almacenar likes, y crearemos una ruta post para los likes:
+Route::post('/recetas/{receta}', LikesController@store)->name('likes.store');
+Esa ruta se solicitará cuando apretemos el botón de MG. Se enviará una señal de qué usuario le dio mg a la receta.
+
+9- El siguiente paso, es indicar la acción que hará el botón al darle click. 
+Si el usuario no ha dado me gusta, se enviará una petición para que el me gusta se almacene a ESA receta. Y si ya hay, se retirará el me gusta.
+
+10- Laravel tiene un mecanismo sencillo para lograr esto, y es con el método toggle(), que es un helper que viene en laravel. Este helper automáticamente
+pone o saca un megusta.
+return auth()->user()->meGusta()->toggle($receta);
+
+Vemos que dice $receta como parámetro, porque el MG estará aplicado sobre 
+UNA RECETA, justamente. 
+Cuando creamos el controlador, asociamos el mismo al modelo (con el -m Receta)
+por lo que este $receta tendrá la información de la receta que estamos viendo.
+
+------------------------------------------------------------------------------
+
+11-Ahora, almacenaremos los me gusta en la BBDD.
+En el archivo LikeButton.vue, le agregaremos un @click al span 
+que contiene al botón. @click='likeReceta';
+
+12- Luego, crearemos un script dentro del mismo archivo que dirá qué es lo que hace este botón al darle click. Con Vue, estas funciones se crean dentro de un 
+apartado llamado export default y a su vez, dentro de un apartado llamado methods:.
+Esto quedaría así:
+
+  <span class="like-btn" @click="likeReceta"></span>
+Y en el script:
+
+export default {
+  methods: {
+    likeReceta(){
+      
+    }
+  }
+}
+
