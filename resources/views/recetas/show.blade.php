@@ -1,21 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<article class='contenido-receta'>
+<article class='contenido-receta bg-white p-5 shadow'>
     {{--$receta--}}
 
-    <h1 class='text-center my-3'>{{$receta->titulo}}</h1>
+    <h1 class='text-center my-3'>{{Str::title($receta->titulo)}}</h1>
 
     <div class="receta-meta">
         
             <p>
                 <span class='font-weight-bold text-primary'>Categoría: </span>
-                {{$receta->categoria->nombre}}
+                <a class='text-dark' href="{{route('categorias.show', ['categoriaReceta'=>$receta->categoria->id])}}">
+                    {{$receta->categoria->nombre}}
+                </a>
             </p>
             <p>
                 <span class='font-weight-bold text-primary'>Autor: </span>
-                {{$receta->user->name}}
+                <a class='text-dark' href="{{route('perfiles.show',['perfil'=>$receta->user->id])}}">
+                    {{$receta->user->name}}
+                </a>
             </p>
+
             <p>
                 <span class='font-weight-bold text-primary'>Fecha: </span>
                 <!--El siguiente código convierte el date format a lo que queramos-->
@@ -25,7 +30,7 @@
         
     </div>
     <div class="imagen-receta">
-        <img src="/storage/{{$receta->imagen}}" alt="{{$receta->titulo}}" class='w-100'>
+        <img class='shadow my-3' src="/storage/{{$receta->imagen}}" alt="{{$receta->titulo}}" class='w-100'>
     </div>
 
     <div class="ingredientes">
@@ -40,10 +45,6 @@
             {!! $receta->preparacion !!}
         </p>
     </div>
-
-    <like-button receta-id="{{$receta->id}}">
-    </like-button>
-    
 </article>
 
 @endsection

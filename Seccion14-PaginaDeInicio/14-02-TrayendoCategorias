@@ -1,0 +1,63 @@
+1- En el método index de InicioController, haremos lo siguiente: 
+
+    A-Obtener las categorías
+    $categorias = CategoriaReceta::all(); //almacena todas las categorías en la variable $categorias
+
+    B-creamos un array vacío, donde almacenaremos las recetas de cada categoría.
+    Como vemos en el foreach, por cada categoría se creará un array.
+    $recetas = []; 
+
+    C-Utilizaremos un foreach para crear un array para cada categoría, y en cada array introduciremos los datos de dichas categorías.
+
+        foreach ($categorias as $categoria){
+            $recetas [Str::slug($categoria->nombre)][]=Receta::where('categoria_id', $categoria->id)->limit(3)->get();
+        }
+
+    Se lee: Para cada item $categoria, de $categorias, crearemos un array bidimensional.
+    En la primera dimensión, introduciremos el nombre de la categoría (str::slug sirve para estilizar los textos
+    Autos Rojos -> autos-rojos). La segunda dimensión queda vacía. 
+    Y luego decimos que este array, pertenecerá a aquellas recetas en las que la categoria_id sea igual al id de la categoría. (raro, pero es así).
+    Por último, decimos que nos traiga solo 3 recetas (con limit(3)) y con get(); decimos que se ejecute la orden.
+
+2- Una vez traídas las categorías y vamos a trabajar en el blade de inicio.
+
+Abajo del carrusel, vamos a crear un foreach, en el que diremos que por cada categoría, nos traiga una key, y de la key obtendremos el valor que deseamos.
+Esto es, por ejemplo: Esto es: Categoría->key->valor
+Luego, dentro, creamos otro foreach en el que pase el valor como recetas,
+y luego OTRO foreach, en el que pasará las recetas como receta.
+
+Una vez hicimos eso, comenzamos a trabajar con la variable $receta normalmente.
+
+@foreach($recetas as $key => $value)
+        <div class="container">
+            <h2 class='titulo-categoria text-uppercase my-4'>{{ str_replace("-", ' ',  $key)}}</h2>
+        <div class="row">
+            @foreach($value as $recetas)
+                @foreach($recetas as $receta)
+                    <div class="col-md-4 my-4">
+                        <div class="card shadow">
+                            <img class='card-img-top' src="/storage/{{$receta->imagen}}" alt="">
+                            <div class="card-body">
+                                <div class="card-title"><h3>{{ Str::title($receta->titulo)}}</h3></div>
+                                <div class="card-text">
+                                    <p> <span class='text-primary'>Fecha de Creación: </span> {{\Carbon\Carbon::parse($receta->created_at)->format('d/m/Y')}}</p>
+                                
+                                    <p><span class='text-primary'>Autor:</span> {{$receta->user->name}} </p>
+                                    <p class='text-muted'>
+                                        {{ Str::words(strip_tags($receta->preparacion), 10)}} 
+                                    </p>
+                                <div class="card-button">
+                                    <a href="/recetas/{{$receta->id}}" class='btn btn-primary font-weight-bold
+                                        text-uppercase'>Ver Receta</a>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endforeach
+        </div>
+        </div>  
+        @endforeach
+
+

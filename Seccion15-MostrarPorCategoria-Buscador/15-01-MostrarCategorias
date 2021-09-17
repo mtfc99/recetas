@@ -1,0 +1,46 @@
+TODO lo que hemos hecho en laravel hasta ahora, se ha hecho desde algo llamado
+PROVIDERS.
+Los providers estan en la carpeta providers dentro de la carpeta app.
+
+1-Crearemos un provider para mostrar todas las categorias.
+php artisan make:provider CategoriasProvider
+Para que este provider que creamos se pueda utilizar, debemos registrarlo en 
+config/app.php -> application service providers...
+
+2-El provider creado nos creará dos métodos, uno llamado BOOT y otro REGISTER.
+Trabajermos en BOOT.
+
+3- Dentro del método boot, le diremos que en todas las vistas queremos ver las 
+categorias.
+View::composer('*', function($view){
+
+}); y para que ese método View funcione, escribiremos use View; arriba de todo 
+en el archivo provider.
+
+4- Dentro de la función View, crearemos una variable $categorias, que incluirá
+a todas las categorías de la receta.
+$categorias=CategoriaReceta::all();
+y luego, pasaremos como argumento al parámetro view(que establecimos en la declaracion del método View (linea 15 de este archivo)) las categorías, con un 
+view en lugar de un compact.
+
+$view->with('categorias',$categorias);
+
+5- Este método view del boot, nos quedaría así:
+
+View::composer('*', function($view){
+            $categorias=CategoriaReceta::all();
+            $view->with('categorias', $categorias);
+});
+
+6- Una vez que hicimos esto, estas categorías están disponibles para mostrarse en todas las vistas del proyecto (lo hicimos con el asterisco), por lo que ahora
+solo queda pasar estas categorías a las vistas para que se puedan ver.
+En la clase 129, está el código bootstrap que debemos pegar en app.blade.php. 
+
+7-Ahora, al darle click a una categoría, nos llevará a una página para mostrarnos
+las recetas que tiene esta categoría.
+Para esto, crearemos un CategoriasController.
+
+8- En la hoja de rutas, debemos crear la ruta para que nos muestre las categorías
+Esto lo haremos creando una ruta get, con /categoria/{categoriaReceta}, y el método que nos traerá, es el Show del controller de Categorias.
+
+9-En su único método

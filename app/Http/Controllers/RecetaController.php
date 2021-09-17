@@ -19,7 +19,8 @@ class RecetaController extends Controller
 /*Este método constructor; hace que no se pueda acceder al resto de los
 métodos del controlador sin estar autenticado en el sitio*/
     public function __construct(){
-        $this->middleware('auth', ['except'=>'show']);
+        $this->middleware('auth', ['except'=>['show','search']]);
+    
     }
 
     public function index()
@@ -230,5 +231,14 @@ $receta->titulo, por ejemplo.
         $receta->delete();
 
         return redirect()->action('RecetaController@index');
+    }
+
+    public function search(Request $request){
+        $busqueda = $request['buscar'];
+
+        $recetas=Receta::where('titulo','like','%'.$busqueda.'%')->paginate(6);
+        $recetas->appends(['buscar'=>$busqueda]);
+
+        return view('busquedas.show', compact('recetas', 'busqueda'));
     }
 }

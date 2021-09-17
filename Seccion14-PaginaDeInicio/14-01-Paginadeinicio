@@ -19,6 +19,7 @@ archivo a nuestro placer. Yo sigo el diseño del enseñante.
 6- Una vez creada la base de la página de inicio, debemos traer las últimas recetas para que el usuario no vea siempre lo mismo.
 
 --------------------------------------------------------------------------------
+TRAER LAS RECETAS AL INICIO
 
 7- Para traer las recetas, debemos crear una variable que almacene las recetas
 según su orden, ya sea de creación, de ID ,o de lo que queramos.
@@ -31,5 +32,48 @@ Esto va dentro del método index del InicioController.
 
 8- Se trabaja en el front end como se quiera.
 
+-------------------------------------------------------------------------------
+
+CARRUSEL
 9- Añadiremos un carrusel para mostrar las últimas recetas.
 En consola, escribimos: npm i owl.carousel
+
+10- Una vez instalado owl carousel, y teniendo en cuenta que Laravel ya trae
+jQuery instalado, vamos al archivo webpack.mix.js y entro de 
+mix, escribimos
+.autoload({
+    jquery:['$', 'window.jQuery','jQuery']
+})
+
+11- En app.js, escribimos import 'owl.carousel'; y al final del app.js, escribiermos
+jQuery(function(){
+    alert('funciona');
+}); 
+Para testear que esté todo funcionando. Luego borramos el alert.
+
+12- Para trabajar con owl carousel, se utiliza una clase propia, que reemplaza a una row, 
+y es owl-carousel y owl-theme. Si había columnas, también se eliminan.
+
+13- En la funcion jQuery (la del paso 11), borramos el alerta, y dentro
+pasamos los parámetros para owl carousel.
+jQuery(function(){
+    jQuery('.owl-carousel').owlCarousel({
+        margin:15, //MARGEN ENTRE LOS ITEMS DEL CARRUSEL
+        autoplay:true, //MOVIMIENTO AUTOMÁTICO
+        autoplayTimeout:4000, 
+        autoplaySpeed:800,
+        autoplayHoverPause: true, //EL MOV. PAUSA SI TENEMOS EL PUNTERO SOBRE UN ITEM
+        loop:true, //LOS ITEMS PASAN EN LOOP
+        responsive:{//RESPONSIVIDAD PARA DISTINTOS TAMAÑOS DE PANTALLA
+            0:{
+                items:1
+            },
+            600:{
+                items:2
+            },
+            1000:{
+                items:3
+            }
+        }
+    })
+})
